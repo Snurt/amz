@@ -1,0 +1,116 @@
+class LookupsController < ApplicationController
+  # GET /lookups
+  # GET /lookups.xml
+  def index
+    require 'rexml/document' 
+    require 'hmac-sha2'
+    require 'open-uri'
+
+    @SecretKey='l1OK46EWvCPid1jKYBzWR0aT1jz1U+luT5CG/VHm'
+    @AWSAccessKeyId='AKIAIWVW3RXPPPYYY6DA'
+    @ItemId="0679722769"
+    @Operation="ItemSearch"
+    @Foo=params[:keywords]
+    @Keywords=if params[:keywords]!="" then "Camera" else params[:keywords] end
+#    @Keywords="Canon"
+    @SearchIndex='Photo'
+    @Service='AWSECommerceService'
+    @Timestamp=CGI::escape(Time.new.strftime("%Y-%m-%dT%H:%M:%SPDT"))
+    @Version='2009-01-06'
+
+    @sstring="GET\nwebservices.amazon.com\n/onca/xml\n"
+    @sstring+='AWSAccessKeyId='+@AWSAccessKeyId
+    @sstring+='&Keywords='+@Keywords
+    @sstring+='&Operation='+@Operation
+    @sstring+='&SearchIndex='+@SearchIndex
+    @sstring+='&Service='+@Service
+    @sstring+='&Timestamp='+@Timestamp
+    @sstring+='&Version='+@Version
+
+    @aaaqs='http://webservices.amazon.com/onca/xml?Service='+@Service+'&AWSAccessKeyId='+@AWSAccessKeyId+'&Operation='+@Operation+'&Keywords='+@Keywords+'&SearchIndex='+@SearchIndex+'&Version='+@Version +'&Timestamp='+@Timestamp
+
+    hmac = HMAC::SHA256.new(@SecretKey)
+    hmac.update(@sstring)
+    @aaaqs+='&Signature='+CGI::escape(Base64.encode64(hmac.digest).chomp)
+## chomp is important! the base64 encoded version will have a newline at the end
+
+    @doc= REXML::Document.new open(@aaaqs).read
+    @ItemArray=Array.new
+
+    @doc.elements.to_a("ItemSearchResponse/Items/Item/ItemAttributes/").each do |items|
+      @ItemArray << [items.elements["Title"].text, items.elements["Manufacturer"].text]
+    end
+  end
+
+  # GET /lookups/1
+  # GET /lookups/1.xml
+  def show
+    @lookup = Lookup.find(params[:id])
+
+    respond_to do |format|
+      format.html # show.html.erb
+      format.xml  { render :xml => @lookup }
+    end
+  end
+
+  # GET /lookups/new
+  # GET /lookups/new.xml
+  def new
+    @lookup = Lookup.new
+
+    respond_to do |format|
+      format.html # new.html.erb
+      format.xml  { render :xml => @lookup }
+    end
+  end
+
+  # GET /lookups/1/edit
+  def edit
+    @lookup = Lookup.find(params[:id])
+  end
+
+  # POST /lookups
+  # POST /lookups.xml
+  
+  def create
+    @lookup = Lookup.new(params[:lookup])
+
+    respond_to do |format|
+      if @lookup.save
+        format.html { redirect_to(@lookup, :notice => 'Lookup was x successfully created.') }
+        format.xml  { render :xml => @lookup, :status => :created, :location => @lookup }
+      else
+        format.html { render :action => "new" }
+        format.xml  { render :xml => @lookup.errors, :status => :unprocessable_entity }
+      end
+    end
+  end
+
+  # PUT /lookups/1
+  # PUT /lookups/1.xml
+  def update
+    @lookup = Lookup.find(params[:id])
+
+    respond_to do |format|
+      if @lookup.update_attributes(params[:lookup])
+        format.html { redirect_to(@lookup, :notice => 'Lookup was y successfully updated.') }
+        format.xml  { head :ok }
+      else
+        format.html { render :action => "edit" }
+        format.xml  { render :xml => @lookup.errors, :status => :unprocessable_entity }
+      end
+    end
+  end
+
+  # DELETE /lookups/1
+  # DELETE /lookups/1.xml
+  def destroy
+    @lookup = Lookup.find(params[:id])
+    @lookup.destroy
+
+    respond_to do |format|
+      format.html { redirect_to(lookups_url) }
+      format.xml  { head :ok }
+    end
+  end
+end

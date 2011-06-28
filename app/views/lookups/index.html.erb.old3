@@ -1,0 +1,27 @@
+<h1>Amazon Search Results</h1>
+
+<%= form_tag (lookups_path :action => 'index')  do %>
+  <%= label_tag(:kwlabel, "Keywords") %>
+  <%= text_field_tag(:keywords, "Canon") %>
+  <%= submit_tag("Search") %>
+<% end %>
+
+<p> Foo= <%=@Foo%> </p>
+
+<table>
+  <tr>
+    <th>Title</th>
+    <th>Manufacturer</th>
+    <th>Price</th>
+    <th></th>
+  </tr>
+
+<% @ItemArray.each do |i| %>
+<tr>
+  <td> <%= i.to_a[0] %> </td>
+  <td> <%= i.to_a[1] %> </td>
+</tr>
+<% end %>
+
+
+</table>

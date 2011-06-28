@@ -1,0 +1,39 @@
+<h1>Amazon Search Results</h1>
+
+<p>Keyword: "Canon" at Amazon</p>
+<p> @aaaqs: <%= @aaaqs %> </p>
+<p> @doc.elements["ItemSearchResponse/Items[1]/Item/ItemAttributes/Title"].text: <%=  @doc.elements["ItemSearchResponse/Items[1]/Item/ItemAttributes/Title"].text %> </p>
+<p> @titles: <%= @titles %> </p>
+<p> @i: <%= @i %> </p>
+<p> @ItemArray: <%= @ItemArray %> </p>
+
+<table>
+  <tr>
+    <th>Title</th>
+    <th>Manufacturer</th>
+    <th>Price</th>
+    <th></th>
+  </tr>
+
+<%= if false %>
+COMMENTED OUT
+<% @ItemArray.each do |f| %>
+  <tr>
+    <td><%= f %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Lookup', new_lookup_path %>
+<% end %>
+<p> @aaaqr: <%= @aaaqr %> </p> 
+
+
+<%= if false %>
+COMMENTED OUT
+    <td><%= link_to 'Show', title %></td>
+    <td><%= link_to 'Edit', edit_lookup_path(title) %></td>
+    <td><%= link_to 'Destroy', title, :confirm => 'Are you sure?', :method => :delete %></td>
+<% end %>

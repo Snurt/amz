@@ -1,0 +1,58 @@
+<h1>Amazon Search Results</h1>
+
+<%= form_tag lookups_path, :method => "get"  do %>
+<table>
+<tr>
+<td><%= label_tag(:kwlabel, "Keywords") %></td>
+<td><%= text_field_tag(:keywords, @Keywords) %></td>
+</tr>  
+<tr>  
+<td><%= label_tag(:brandlabel, "Brand") %></td>
+<td><%= text_field_tag(:brand, @Brand) %></td>
+</tr>  
+<tr>
+<td><%= submit_tag("Search") %></td>
+</tr>
+<% end %>
+</table>
+
+<% if false %>
+<p> @Keywords: <%=@Keywords %> </p>
+<p> @ResponseGroup: <%=@ResponseGroup %> </p>
+<p> @sstring: <%=@sstring %> </p>
+
+<p> @ItemArray: <%=@ItemArray.to_s %> </p>
+<p> @ItemArray[0]: <%=@ItemArray[0].to_s %> </p>
+<p> @ItemArray[0][0]: <%=@ItemArray[0][0] %> </p>
+<% end %>
+
+<p> @aaaqs: <%=@aaaqs %> </p>
+
+<p>Results/Pages: <%=@NumItems%>/<%=@NumPages%>  </p>
+
+<table>
+  <tr>
+    <th width="50%" align="center">Title </th>
+    <th align="left">Manufacturer</th>
+    <th align="left">Price</th>
+    <th></th>
+  </tr>
+
+<% if false %>
+<% end %>
+
+<% @ItemArray.each do |i| %>
+<tr>
+  <% k=0 %>
+  <% i.each do |j| %>
+  <% if k then %>
+  <td width ="10%" align="left"> <%= if j then j.text end %> </td>
+  <% else %>
+  <td width="50%" align="left"> <%= if j then j.text end %> </td>
+	     <% end %>
+  
+  <% end %>
+</tr>
+<% end %>
+</table>
+
